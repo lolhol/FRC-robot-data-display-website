@@ -3,6 +3,7 @@ use std::{
     sync::{Arc, Mutex},
 };
 
+use colored::Colorize;
 use tokio::signal;
 
 #[macro_use]
@@ -46,19 +47,19 @@ async fn main() {
     let shutdown_signal = async {
         signal::ctrl_c()
             .await
-            .expect("Failed to listen for shutdown signal (Ctrl+C)");
+            .expect(&"Failed to listen for shutdown signal (Ctrl+C)".red());
         println!("Received shutdown signal. Shutting down...");
     };
 
     tokio::select! {
         _ = table_task => {
-            println!("Gracefully shutting down Rocket server and network table tasks.");
+            println!("{}", "Table task shut down!".red());
         }
         _ = server_task => {
-            println!("Gracefully shutting down Rocket server and network table tasks.");
+            println!("{}", "Backend server task shut down!".red());
         }
         _ = shutdown_signal => {
-            println!("Gracefully shutting down Rocket server and network table tasks.");
+            println!("{}", "Gracefully shutting down Rocket server and network table tasks.".green());
         }
     };
 
