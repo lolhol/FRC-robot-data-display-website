@@ -28,14 +28,15 @@ impl SQLiteDatabase {
     }
 
     pub fn get_value(&self, topic: &str) -> Result<TableEntree, rusqlite::Error> {
+        println!("Getting value for topic: {}", topic);
         self.connection.query_row(
-            "SELECT (value, timestamp) FROM data WHERE topic = ?",
+            "SELECT value, timestamp FROM data WHERE topic = ?1",
             [topic],
             |row| {
                 Ok(TableEntree {
-                    topic: topic.to_string(),
-                    value: row.get(0)?,
-                    timestamp: row.get(1)?,
+                    topic: topic.to_string(), // `topic` is provided as input
+                    value: row.get(0)?,       // `value` is in the first column of the result
+                    timestamp: row.get(1)?,   // `timestamp` is in the second column of the result
                 })
             },
         )

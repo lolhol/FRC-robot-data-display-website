@@ -6,11 +6,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: "/api/:path*",
-        destination: "http://localhost:8000/api/:path*",
+        source: "/api/database/:path*",
+        destination: `http://localhost:${process.env.RUST_DB_API_PORT}/:path*`, // Read port from .env
       },
     ];
   },
 };
 
+// Use ES module syntax to export the config
 export default nextConfig;

@@ -4,11 +4,11 @@ echo "Starting server using macOS"
 
 echo "Installing dependencies for Rust..."
 
-cd ReTranslator
+cd backend
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 rustup update
 
-echo "Building ReTranslator..."
+echo "Building backend..."
 cargo build --release
 
 cd ../
@@ -22,7 +22,7 @@ nvm install 20
 echo "Downloading deps..."
 npm install
 
-echo "Starting ReTranslator and Server..."
+echo "Starting backend and Server..."
 
-killall ReTranslator
-(cd ./ReTranslator && cargo run --release) & (npm run dev) && fg
+killall backend
+(cd ./backend && cargo run --release) & (npm run dev) && fg
