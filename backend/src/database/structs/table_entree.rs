@@ -1,6 +1,6 @@
 use network_tables::v4::MessageData;
 
-#[derive(Debug, serde::Serialize, serde::Deserialize)]
+#[derive(Debug, serde::Serialize, serde::Deserialize, Clone)]
 pub struct TableEntree {
     pub topic: String,
     pub value: String,
