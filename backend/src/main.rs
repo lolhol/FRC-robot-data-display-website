@@ -14,6 +14,7 @@ mod server;
 
 #[tokio::main()]
 async fn main() {
+    // runs the main code.
     let local_set = tokio::task::LocalSet::new();
     let database = Arc::new(Mutex::new(
         database::SQLiteDatabase::new(
