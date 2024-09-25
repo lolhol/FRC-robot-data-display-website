@@ -2,19 +2,16 @@ use std::sync::{Arc, Mutex};
 
 use rocket::{serde::json::Json, State};
 
-use crate::database::{self, structs::table_entree::TableEntree, SQLiteDatabase};
+use crate::{
+    database::{structs::table_entree::TableEntree, SQLiteDatabase},
+    server::api::database::data_struct::Topic,
+};
 
-#[derive(serde::Serialize, serde::Deserialize)]
-pub struct Topic {
-    topic: String,
-}
-
-#[post("/get_entree", data = "<table_topic>")]
+#[post("/get-entree", data = "<table_topic>")]
 pub fn get_entree(
     table_topic: Json<Topic>, // Use Json to accept POST request data
     database: &State<Arc<Mutex<SQLiteDatabase>>>,
 ) -> Json<TableEntree> {
-    println!("Getting Entree");
     let database = database.lock().unwrap();
 
     Json(
@@ -26,10 +23,4 @@ pub fn get_entree(
                 u32::MIN,
             )),
     )
-}
-#[delete("/clean_database")]
-pub fn clean_database(database: &State<Arc<Mutex<SQLiteDatabase>>>) {
-    println!("Cleaning Database");
-    let database = database.lock().unwrap();
-    let _ = database.clean_database();
 }

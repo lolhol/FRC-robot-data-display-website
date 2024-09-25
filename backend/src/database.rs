@@ -1,4 +1,3 @@
-use std::time::{SystemTime, UNIX_EPOCH};
 
 use rusqlite::Connection;
 use structs::table_entree::TableEntree;

@@ -1,6 +1,9 @@
 use std::sync::{Arc, Mutex};
 
-use api::database::route::{clean_database, get_entree};
+use api::database::{
+    clean_whole_db::clean_whole_database, clear_database::clear_database, get_entree::get_entree,
+    get_entries::get_entries, get_entry_and_clean::get_entree_and_clean,
+};
 use tokio::spawn;
 
 use crate::database::SQLiteDatabase;
@@ -12,7 +15,17 @@ pub fn rocket_launch(database_instance: Arc<Mutex<SQLiteDatabase>>) -> tokio::ta
         let database_instance = database_instance.clone();
         rocket::build()
             .manage(database_instance)
-            .mount("/", routes![get_entree, clean_database])
+            .mount(
+                "/",
+                routes![
+                    get_entree,
+                    clean_whole_database,
+                    get_entree_and_clean,
+                    get_entries,
+                    clean_whole_database,
+                    clear_database
+                ],
+            )
             .launch()
             .await
             .expect("Rocket failed to launch");

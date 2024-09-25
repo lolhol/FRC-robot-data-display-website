@@ -20,4 +20,8 @@ impl TableEntree {
         println!("{:?}", data);
         Self::new(data.topic_name, data.data.to_string(), data.timestamp)
     }
+
+    pub fn get_error() -> Self {
+        Self::new("ERROR".to_string(), "ERROR".to_string(), u32::MIN)
+    }
 }
