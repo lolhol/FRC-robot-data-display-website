@@ -1,4 +1,3 @@
-
 use rusqlite::Connection;
 use structs::table_entree::TableEntree;
 
@@ -77,12 +76,12 @@ impl SQLiteDatabase {
         Ok(())
     }
 
-    pub fn add_value_cleaning(&mut self, data: TableEntree) -> Result<(), rusqlite::Error> {
-        self.clean_database_time(self.min_time_between_cleans);
-        self.add_value(data);
+    /*pub fn add_value_cleaning(&mut self, data: TableEntree) -> Result<(), rusqlite::Error> {
+        let _ = self.clean_database_time(self.min_time_between_cleans);
+        let _ = self.add_value(data);
 
         Ok(())
-    }
+    }*/
 
     pub fn clean_database(&self) -> Result<(), rusqlite::Error> {
         self.clean_database_time(self.min_time_between_cleans)

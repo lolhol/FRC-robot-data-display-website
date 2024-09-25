@@ -59,7 +59,7 @@ pub fn begin_network_table(
 pub fn write_all(message: MessageData, database: Arc<Mutex<SQLiteDatabase>>) -> () {
     println!("Writing to database");
 
-    let res = database
+    let _res = database
         .lock()
         .unwrap()
         .add_value(TableEntree::from_message(message));
