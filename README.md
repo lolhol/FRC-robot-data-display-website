@@ -28,3 +28,7 @@ public void robotInit() {
 
 2. Run the "Run.bash" script in the root folder and accept anything it asks you. That will install (theoretically) everything that is needed and will run the actual backend and front end code (yes they are separate).
 3. Go to localhost:3000 and you should be able to click the buttons with a response.
+
+---
+
+For a complete API documentation, please see the [API Documentation](BackendAPISupportLists.md)
