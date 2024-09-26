@@ -125,9 +125,15 @@ mod test {
     use super::*;
 
     mod utils {
+        use std::fs::File;
+
         use super::*;
 
         pub fn get_database(min_time_between_cleans: u32) -> SQLiteDatabase {
+            if !std::path::Path::new("test.db").exists() {
+                let _ = File::create("test.db"); // create an empty file
+            }
+
             let db = SQLiteDatabase::new("test.db", min_time_between_cleans).unwrap();
             let _ = db.clear_database();
             db
@@ -151,6 +157,7 @@ mod test {
     }
 
     #[test]
+    #[serial_test::serial]
     fn test_clean_and_new() {
         let mut database = utils::get_database(2);
         database
@@ -164,6 +171,7 @@ mod test {
     }
 
     #[test]
+    #[serial_test::serial]
     fn test_topic_length() {
         let mut database = utils::put_data_in_database(utils::get_database(2), 5, 1);
         database
@@ -173,12 +181,14 @@ mod test {
     }
 
     #[test]
+    #[serial_test::serial]
     fn test_length() {
         let database = utils::put_data_in_database(utils::get_database(2), 5, 1);
         assert_eq!(database.length().unwrap(), 5);
     }
 
     #[test]
+    #[serial_test::serial]
     fn test_add_value() {
         let mut database = utils::get_database(2);
         database
@@ -189,6 +199,7 @@ mod test {
     }
 
     #[test]
+    #[serial_test::serial]
     fn test_get_values() {
         let database = utils::put_data_in_database(utils::get_database(2), 5, 1);
         let values = database.get_values("test", 2, 5).unwrap();
@@ -196,6 +207,7 @@ mod test {
     }
 
     #[test]
+    #[serial_test::serial]
     fn test_get_values_no_time() {
         let database = utils::put_data_in_database(utils::get_database(2), 5, 1);
         let values = database.get_values_no_time("test", 5).unwrap();
@@ -203,6 +215,7 @@ mod test {
     }
 
     #[test]
+    #[serial_test::serial]
     fn test_clean_database() {
         let database = utils::put_data_in_database(utils::get_database(2), 5, 1);
         database.clean_database().unwrap();

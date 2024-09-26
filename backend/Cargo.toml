@@ -16,3 +16,4 @@ dotenv = "0.15.0"
 rocket = {version = "*", features = ["json"] }
 rusqlite = { version = "0.32.0", features = ["bundled"] }
 colored = "2.1.0"
+serial_test = "0.5"

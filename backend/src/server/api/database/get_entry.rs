@@ -43,6 +43,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[serial_test::serial]
     fn test_simulate_poison() {
         let database = Arc::new(Mutex::new(test_util::put_data_in_database(
             test_util::get_database(2),
@@ -70,6 +71,7 @@ mod tests {
     }
 
     #[test]
+    #[serial_test::serial]
     fn test_get_value() {
         let database = Arc::new(Mutex::new(test_util::put_data_in_database(
             test_util::get_database(2),
