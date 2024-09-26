@@ -32,6 +32,7 @@ async fn main() {
 
     let table_task = local_set.run_until(async move {
         let database = Arc::clone(&database);
+        let _ = database.lock().unwrap().clear_database();
         let _ = network_table_bridge::begin_network_table(
             env::var("NETWORK_TABLE_IP").unwrap(),
             env::var("NETWORK_TABLE_PORT").unwrap().parse().unwrap(),

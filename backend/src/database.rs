@@ -62,7 +62,11 @@ impl SQLiteDatabase {
     }
 
     pub fn get_value(&self, topic: &str) -> Result<TableEntree, rusqlite::Error> {
-        Ok(self.get_values(topic, self.last_update, 50)?[0].clone())
+        Ok(self
+            .get_values(topic, self.last_update, 1)?
+            .get(0)
+            .unwrap_or(&TableEntree::get_error())
+            .clone())
     }
 
     pub fn add_value(&mut self, data: TableEntree) -> Result<(), rusqlite::Error> {

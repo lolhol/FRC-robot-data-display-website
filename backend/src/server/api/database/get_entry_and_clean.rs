@@ -7,7 +7,7 @@ use crate::{
     server::api::database::data_struct::Topic,
 };
 
-#[post("/get-entree-and-clean", data = "<table_topic>")]
+#[post("/get-entry-and-clean", data = "<table_topic>")]
 pub fn get_entree_and_clean(
     table_topic: Json<Topic>,
     database: &State<Arc<Mutex<SQLiteDatabase>>>,

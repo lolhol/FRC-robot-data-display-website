@@ -2,24 +2,44 @@
 
 ## Database Operations
 
-### /api/database/clean-whole-database
+### `/api/database/clean-whole-database`
 
-- **Method:** DELETE
-- **Description:** Cleans the entire database based on a configured time value.
+- **Method**: `DELETE`
+- **Description**: This endpoint removes all entries from the database based on a configured retention time. It is typically used for maintenance purposes to clean out outdated or irrelevant data.
+
+- **Code Example** (JavaScript/TypeScript):
+  ```js
+  await fetch("/api/database/clean-whole-database", {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error("Error:", error));
+  ```
 
 ---
 
-### /api/database/clear-database
+### `/api/database/clear-database`
 
-- **Method:** DELETE
-- **Description:** Deletes all data from the database.
+- **Method**: `DELETE`
+- **Description**: Completely wipes the entire database. Use this endpoint with caution as it **permanently** deletes all data.
+
+- **Code Example** (JavaScript/TypeScript):
+  ```js
+  await fetch("/api/database/clear-database", {
+    method: "DELETE",
+  })
+    .then((response) => response.json())
+    .then((data) => console.log(data))
+    .catch((error) => console.error("Error:", error));
+  ```
 
 ---
 
-### /api/database/get-entree
+### `/api/database/get-entry`
 
-- **Method:** POST
-- **Request Fields:**
+- **Method**: `POST`
+- **Request Body**:
 
   ```json
   {
@@ -27,11 +47,10 @@
   }
   ```
 
-- **Response:**
+- **Description**: Retrieves the latest entry for a specified topic from the database.
+- **Response**: Returns the most recent value for the specified `topic`.
+- **Error Response**:
 
-  - Returns the latest value for the provided topic.
-
-- **Error Response:**
   ```json
   {
     "topic": "ERROR",
@@ -40,12 +59,27 @@
   }
   ```
 
+- **Code Example** (JavaScript/TypeScript):
+
+  ```js
+  const response = await fetch("/api/database/get-entry", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ topic: "motor_output" }),
+  });
+
+  const data = await response.json();
+  console.log(data);
+  ```
+
 ---
 
-### /api/database/get-entries
+### `/api/database/get-entries`
 
-- **Method:** POST
-- **Request Fields:**
+- **Method**: `POST`
+- **Request Body**:
 
   ```json
   {
@@ -55,11 +89,10 @@
   }
   ```
 
-- **Response:**
+- **Description**: Retrieves multiple entries for the provided topic, with optional limits on how many entries to return and how recently they were updated.
+- **Response**: Returns a list of the latest entries for the given `topic`.
+- **Error Response**:
 
-  - Returns the latest entries for the provided topic.
-
-- **Error Response:**
   ```json
   {
     "topic": "ERROR",
@@ -68,12 +101,31 @@
   }
   ```
 
+- **Code Example** (JavaScript/TypeScript):
+
+  ```js
+  const response = await fetch("/api/database/get-entries", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      topic: "motor_output",
+      limit: 10,
+      time_since_last_update: 3600, // optional
+    }),
+  });
+
+  const data = await response.json();
+  console.log(data);
+  ```
+
 ---
 
-### /api/database/get-entree-and-clean
+### `/api/database/get-entry-and-clean`
 
-- **Method:** POST
-- **Request Fields:**
+- **Method**: `POST`
+- **Request Body**:
 
   ```json
   {
@@ -81,11 +133,9 @@
   }
   ```
 
-- **Response:**
-
-  - Returns the latest value for the provided topic and cleans the associated entries from the database.
-
-- **Error Response:**
+- **Description**: Retrieves the latest entry for the specified `topic` and **cleans** the associated entries from the database.
+- **Response**: Returns the latest value for the specified `topic` and removes the corresponding data.
+- **Error Response**:
 
   ```json
   {
@@ -95,4 +145,17 @@
   }
   ```
 
----
+- **Code Example** (JavaScript/TypeScript):
+
+  ```js
+  const response = await fetch("/api/database/get-entry-and-clean", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ topic: "motor_output" }),
+  });
+
+  const data = await response.json();
+  console.log(data);
+  ```

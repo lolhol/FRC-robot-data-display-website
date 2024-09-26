@@ -7,9 +7,9 @@ use crate::{
     server::api::database::data_struct::Topic,
 };
 
-#[post("/get-entree", data = "<table_topic>")]
-pub fn get_entree(
-    table_topic: Json<Topic>, // Use Json to accept POST request data
+#[post("/get-entry", data = "<table_topic>")]
+pub fn get_entry(
+    table_topic: Json<Topic>,
     database: &State<Arc<Mutex<SQLiteDatabase>>>,
 ) -> Json<TableEntree> {
     let database = database.lock().unwrap();
