@@ -38,7 +38,7 @@ impl SQLiteDatabase {
         let rows = stmt.query_map(
             [
                 topic,
-                &(self.last_update - min_time_since_last_update).to_string(),
+                &(self.last_update as i32 - min_time_since_last_update as i32).to_string(),
                 &max_count.to_string(),
             ],
             |row| {
