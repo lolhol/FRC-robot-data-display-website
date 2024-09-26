@@ -4,8 +4,6 @@ echo "Starting server using macOS"
 
 echo "Installing dependencies for Rust..."
 
-cd backend
-
 if ! command -v rustup &> /dev/null
 then
     echo "rustup not found, installing..."
@@ -17,8 +15,6 @@ fi
 
 echo "Building backend..."
 cargo build --release
-
-cd ../
 
 echo "Downloading Server Deps..."
 
@@ -35,4 +31,4 @@ npm install
 
 echo "Starting backend and Server..."
 
-(cd ./backend && cargo run --release) & (npm run dev)
+(cargo run --release) & (npm run dev)
