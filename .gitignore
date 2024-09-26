@@ -39,3 +39,5 @@ target
 Cargo.lock
 test.db
 .VSCodeCounter
+*.db
+db

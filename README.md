@@ -12,6 +12,8 @@ This project stands out from other robot monitoring solutions by using **Next.js
 
 At the core of this project is WPILib's **NetworkTables** — a communication protocol commonly used in robotics (especially **FRC** robots) that allows different systems to share data in real time. This project retrieves robot data by connecting to **NetworkTables** via WebSockets and displaying it live on a web dashboard.
 
+For additional information about how this project works, please refer to [the Methodology doc](docs/Methodology.md).
+
 ### Getting Started
 
 To get started, you first need to set up the **NetworkTables** on your robot. The table acts as a shared space where the robot can publish data (such as motor speeds, sensor values, etc.), and the dashboard can subscribe to these updates and display them live.
@@ -72,7 +74,7 @@ Once the data is retrieved, it can be displayed on the dashboard, offering real-
 
 ## API Documentation
 
-This project provides a well-defined API to interact with **NetworkTables** and other back-end services. To see a complete list of available endpoints and their usage, please refer to the [API Documentation](BackendAPISupportLists.md).
+This project provides a well-defined API to interact with **NetworkTables** and other back-end services. To see a complete list of available endpoints and their usage, please refer to the [API Documentation](docs/BackendAPISupportLists.md).
 
 ---
 
@@ -101,6 +103,6 @@ This project provides a well-defined API to interact with **NetworkTables** and 
 
 ## Contribution Guidelines
 
-We welcome contributions! Feel free to submit a pull request or raise an issue if you encounter any problems or have suggestions for improvements. Please refer to our [Contribution Guide](CONTRIBUTING.md) for more details.
+We welcome contributions! Feel free to submit a pull request or raise an issue if you encounter any problems or have suggestions for improvements. Please refer to our [Contribution Guide](docs/CONTRIBUTING.md) for more details.
 
 ---
