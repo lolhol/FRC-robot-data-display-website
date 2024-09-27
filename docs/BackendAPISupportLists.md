@@ -28,7 +28,7 @@
     ```json
     {
       "Err": {
-        "DatabasePoisonedError": -1
+        "DatabasePoisonedError": 0    // 0 is the exit code
       }
     }
     ```
@@ -45,7 +45,7 @@
   ```
 
 - **Error Handling**:
-  - **`DatabasePoisonedError(-1)`**: This error is returned when the `Mutex` guarding the database has been poisoned, usually because of a panic during a previous operation. It prevents further access to the database until resolved.
+  - **`DatabasePoisonedError(0)`**: This error is returned when the `Mutex` guarding the database has been poisoned, usually because of a panic during a previous operation. It prevents further access to the database until resolved.
 - **Success Response**:
   - **`DatabaseCleaningSuccess`**: This status is returned when the entire database has been successfully cleaned.
 
@@ -77,7 +77,7 @@
       ```json
       {
         "Err": {
-          "DatabasePoisonedError": -1
+          "DatabasePoisonedError": 0    // exit code
         }
       }
       ```
@@ -94,7 +94,7 @@
   ```
 
 - **Error Handling**:
-  - **`DatabasePoisonedError(-1)`**: Returned when the database lock is poisoned, preventing access to the database due to a previous panic or critical error.
+  - **`DatabasePoisonedError(0)`**: Returned when the database lock is poisoned, preventing access to the database due to a previous panic or critical error.
 - **Success Response**:
   - **`DatabaseClearingSuccess`**: This status is returned when a portion or specific entries in the database have been cleared successfully, without affecting the entire database.
 
@@ -127,8 +127,9 @@
       ```json
       {
         "Ok": {
-          "id": 1,
-          "value": "example_value"
+          "topic": "example_topic",
+          "value": "example_value",
+          "timestamp": 111,
         }
       }
       ```
@@ -149,7 +150,7 @@
       ```json
       {
         "Err": {
-          "DatabasePoisonedError": -1
+          "DatabasePoisonedError": 0
         }
       }
       ```
@@ -179,7 +180,7 @@
 
 - **Error Handling**:
 
-  - **`DatabasePoisonedError(-1)`**: This error occurs if the database lock is poisoned, typically due to a previous panic that prevents safe access to the database.
+  - **`DatabasePoisonedError(0)`**: This error occurs if the database lock is poisoned, typically due to a previous panic that prevents safe access to the database.
 
 - **Success Response**:
   - **`Some(TableEntree)`**: Returned when the `topic` exists in the database and its corresponding data is found.
@@ -218,12 +219,14 @@
       {
         "Ok": [
           {
-            "id": 1,
-            "value": "example_value_1"
+            "topic": "example_topic",
+            "value": "example_value",
+            "timestamp": 111,
           },
           {
-            "id": 2,
-            "value": "example_value_2"
+            "topic": "example_topic",
+            "value": "example_value",
+            "timestamp": 222,
           }
         ]
       }
@@ -239,15 +242,15 @@
 
   - **Error**:
 
-    - **`DatabasePoisonedError(-1)`**: Returned if the database lock is poisoned.
-    - **`DatabaseInvalidAmountError(-1)`**: Returned if the `amount` field is missing or invalid in the request.
+    - **`DatabasePoisonedError(0)`**: Returned if the database lock is poisoned.
+    - **`DatabaseInvalidAmountError(1)`**: Returned if the `amount` field is missing or invalid in the request.
 
     - Example error response (database poisoned):
 
       ```json
       {
         "Err": {
-          "DatabasePoisonedError": -1
+          "DatabasePoisonedError": 0
         }
       }
       ```
@@ -257,7 +260,7 @@
       ```json
       {
         "Err": {
-          "DatabaseInvalidAmountError": -1
+          "DatabaseInvalidAmountError": 1
         }
       }
       ```
@@ -289,8 +292,8 @@
 
 - **Error Handling**:
 
-  - **`DatabasePoisonedError(-1)`**: This error occurs when the internal database lock is poisoned, typically due to a previous panic or critical failure.
-  - **`DatabaseInvalidAmountError(-1)`**: This error is returned if the `amount` field is not provided or is invalid.
+  - **`DatabasePoisonedError(0)`**: This error occurs when the internal database lock is poisoned, typically due to a previous panic or critical failure.
+  - **`DatabaseInvalidAmountError(1)`**: This error is returned if the `amount` field is not provided or is invalid.
 
 - **Success Response**:
   - A JSON array of `TableEntree` objects is returned, representing the entries that match the given `topic` and optional `time_since_last_update` filter.
@@ -326,8 +329,9 @@
       ```json
       {
         "Ok": {
-          "id": 1,
-          "value": "example_value"
+            "topic": "example_topic",
+            "value": "example_value",
+            "timestamp": 111,
         }
       }
       ```
@@ -342,14 +346,14 @@
 
   - **Error**:
 
-    - **`DatabasePoisonedError(-1)`**: Returned if the database lock is poisoned, meaning it cannot be accessed due to a previous error or panic.
+    - **`DatabasePoisonedError(0)`**: Returned if the database lock is poisoned, meaning it cannot be accessed due to a previous error or panic.
 
     - Example error response:
 
       ```json
       {
         "Err": {
-          "DatabasePoisonedError": -1
+          "DatabasePoisonedError": 0
         }
       }
       ```
@@ -379,7 +383,7 @@
 
 - **Error Handling**:
 
-  - **`DatabasePoisonedError(-1)`**: This error is returned when the database lock is poisoned, preventing safe access to the database. The error indicates that a previous panic occurred while accessing the database.
+  - **`DatabasePoisonedError(0)`**: This error is returned when the database lock is poisoned, preventing safe access to the database. The error indicates that a previous panic occurred while accessing the database.
 
 - **Success Response**:
   - **`Some(TableEntree)`**: Returned when the `topic` exists in the database and the corresponding entry is retrieved, followed by a successful database cleanup.
