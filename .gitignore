@@ -41,3 +41,4 @@ test.db
 .VSCodeCounter
 *.db
 db
+database.db
