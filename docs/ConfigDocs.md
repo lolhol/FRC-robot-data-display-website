@@ -1,6 +1,8 @@
 # Configuration Docs
 
-## Two Configs - server and client
+## One Main Config
+
+the config inside .env file applies for both SERVER and CLIENT and both **RUST** and **NEXTJS**.
 
 ---
 
