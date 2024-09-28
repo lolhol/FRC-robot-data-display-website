@@ -7,7 +7,7 @@ use api::database::{
     clean_whole_db::clean_whole_database, clear_database::clear_database, get_entries::get_entries,
     get_entry::get_entry, get_entry_and_clean::get_entry_and_clean,
 };
-use rocket::{Ignite, Rocket};
+use rocket::{Config, Ignite, Rocket};
 
 use crate::database::SQLiteDatabase;
 
@@ -37,9 +37,14 @@ mod api;
 ///
 pub fn rocket_launch(
     database_instance: &Arc<Mutex<SQLiteDatabase>>,
+    port: u16,
 ) -> impl Future<Output = Result<Rocket<Ignite>, rocket::Error>> {
     let database_instance = database_instance.clone();
-    rocket::build()
+    let config = Config {
+        port,                // Set the desired port here
+        ..Config::default()  // Use the default configuration for other settings
+    };
+    rocket::custom(config)
         .manage(database_instance)
         .mount(
             "/",

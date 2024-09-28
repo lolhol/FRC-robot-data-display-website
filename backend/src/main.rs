@@ -51,7 +51,8 @@ async fn main() {
     }
 
     let database = Arc::new(Mutex::new(database.unwrap())); // Arc -> allows multiple pointers to one instance in multiprocessing environments, Mutex -> allows writing safely in a multiprocessing environment
-    let server_task = server::rocket_launch(&database); // get the rocket server start instance
+    let server_task =
+        server::rocket_launch(&database, env::var("SERVER_PORT").unwrap().parse().unwrap()); // get the rocket server start instance
     let table_task = local_set.run_until(async move /* move essentially means that all variables used inside this async function are owned by this async function are moved from the outside */ {
         // get the network table start instance
         network_table_bridge::begin_network_table(
