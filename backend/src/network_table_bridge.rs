@@ -10,7 +10,27 @@ use tokio::task::spawn_local;
 
 use crate::database::{self, structs::table_entree::TableEntree, SQLiteDatabase};
 
-/// Starts the NetworkTable bridge loop. This will work inf as long as the program is running and will try to re-connect if the connection fails.
+/// # Function
+/// This function is used to connect to the network table and to keep the data in sync. It will periodically try to reconnect if it fails to connect.
+/// This is needed because, again, the "main" function would be too long if I were to put the contents of this function inside it
+///
+/// # Parameters
+/// - `url`: The url of the network table
+/// - `port`: The port of the network table
+/// - `time_between_reconnects`: The time between reconnect attempts in milliseconds
+/// - `function_to_call`: The function that will be called when a new message is received
+/// - `database`: The database that will be used to store the data
+///
+/// # Returns
+/// A `tokio::task::JoinHandle<()>`. This is essentially something you can .await with tokio crate - that provides you with a way to wait for the task to finish in a local setting.
+///
+/// # Await Usage
+/// Awaits in rust require you to "ping" the future every so often. This is the function of .await. However, the problem with this is that it freezes the whole current thread.
+/// To fix this, you can attach two different Futures together and wait on that (pinging both processes).
+///
+/// # Await Documentation
+/// https://docs.rs/tokio/latest/tokio/task/struct.JoinHandle.html
+///
 pub fn begin_network_table(
     url: String,
     port: i32,
@@ -70,6 +90,14 @@ pub fn begin_network_table(
     })
 }
 
+/// # Function
+/// This function is used to write the data to the database when the message is received. This is used because a local database is needed for the data coming in from the network table.
+/// This is essentially the function that you pass inside the `begin_network_table` function. I separated it out into a function to make it easier to test and read.
+///
+/// # Parameters
+/// - `message`: The message that will be written to the database
+/// - `database`: The database that will be used to store the data
+///
 pub fn write_all(message: MessageData, database: Arc<Mutex<SQLiteDatabase>>) -> () {
     let _res = database
         .lock()

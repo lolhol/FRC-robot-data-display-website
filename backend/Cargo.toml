@@ -1,6 +1,7 @@
 [package]
 name = "message-receiver-backend"
 version = "0.1.0"
+authors = ["godbrigero"]
 edition = "2021"
 
 [dependencies]

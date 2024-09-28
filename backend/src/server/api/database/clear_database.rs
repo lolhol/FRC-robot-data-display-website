@@ -6,6 +6,17 @@ use crate::database::{self, SQLiteDatabase};
 
 use super::codes::{self, Success};
 
+///
+/// # Function
+/// This function will clear the database
+///
+/// # Parameters
+/// - `database`: The database that will be used to clear the database
+///     - note that the database param is passed into the function by default
+///
+/// # Docs
+/// See more about how Rocket server works here - https://api.rocket.rs/
+///
 #[delete("/clear-database")]
 pub fn clear_database(
     database: &State<Arc<Mutex<SQLiteDatabase>>>,

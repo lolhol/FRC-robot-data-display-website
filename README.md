@@ -72,6 +72,12 @@ Once the data is retrieved, it can be displayed on the dashboard, offering real-
 
 ---
 
+## Configuration Documentation
+
+To configure this project, please refer to the [Configuration Docs](docs/ConfigDocs.md).
+
+---
+
 ## API Documentation
 
 This project provides a well-defined API to interact with **NetworkTables** and other back-end services. To see a complete list of available endpoints and their usage, please refer to the [API Documentation](docs/BackendAPISupportLists.md).

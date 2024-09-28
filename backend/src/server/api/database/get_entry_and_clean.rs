@@ -9,6 +9,15 @@ use crate::{
 
 use super::codes;
 
+///
+/// # Function
+/// Gets an entry from the database based on the provided topic. This is one of the api endpoints that you can call from the frontend. This also cleans the database after the getting of the entry.
+///
+/// # Parameters
+/// - `table_topic`: A `Json<Topic>` that contains the topic to get from the database
+/// - `database`: The database that will be used to get the data
+///     - note that the database param is passed into the function by default
+///
 #[post("/get-entry-and-clean", data = "<table_topic>")]
 pub fn get_entry_and_clean(
     table_topic: Json<Topic>,

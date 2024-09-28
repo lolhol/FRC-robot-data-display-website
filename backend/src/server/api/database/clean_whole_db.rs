@@ -6,6 +6,16 @@ use crate::database::{self, SQLiteDatabase};
 
 use super::codes::{self, Success};
 
+///
+/// # Function
+/// This function will clean the database based on time
+///
+/// # Parameters
+/// - `database`: The database that will be used to clear the database
+///
+/// # Docs
+/// See more about how Rocket server works here - https://api.rocket.rs/
+///
 #[delete("/clean-whole-database")]
 pub fn clean_whole_database(
     database: &State<Arc<Mutex<SQLiteDatabase>>>,

@@ -9,6 +9,20 @@ use crate::{
 
 use super::codes;
 
+///
+/// # Function
+/// Gets entries from the database based on the provided topic. This is one of the api endpoints that you can call from the frontend.
+///
+/// # Parameters
+/// - `table_topic`: A `Json<Topic>` that contains the topic to get from the database
+/// - `database`: The database that will be used to get the data
+///     - note that the database param is passed into the function by default
+///
+/// # Docs
+/// See more about how Rocket server works here - https://api.rocket.rs/
+///
+
+// This code essentially means that the "get_entries" function will be called when you make an api request to the /get-entries endpoint.
 #[post("/get-entries", data = "<table_topic>")]
 pub fn get_entries(
     table_topic: Json<Topic>,

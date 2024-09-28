@@ -7,7 +7,7 @@ const nextConfig = {
     return [
       {
         source: "/api/database/:path*",
-        destination: `http://localhost:${process.env.RUST_DB_API_PORT}/:path*`, // Read port from .env
+        destination: `http://localhost:${process.env.SERVER_PORT}/:path*`, // Read port from .env
       },
     ];
   },
