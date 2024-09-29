@@ -13,6 +13,7 @@ import {
   Legend,
 } from "chart.js";
 import { MotorOutputChart } from "./components/MotorOutputChart";
+import { NetworkTableBridge } from "types_plugin_frc_nw_table";
 
 ChartJS.register(
   CategoryScale,
@@ -34,15 +35,28 @@ export default function Home() {
     if (!startPolling) return;
 
     const interval = setInterval(async () => {
-      //console.log("polling");
-      const response = await makeGetMotorOutputRequest();
+      const response = await NetworkTableBridge.getEntryAndClean({
+        topic: "motor_speed",
+      });
 
-      console.log(JSON.stringify(response) + "!!!!");
-      setValue((prevValue) => [
-        ...prevValue,
-        { timestamp: response.timestamp, output: response.value },
-      ]);
-    }, 250);
+      if (!response.Err && response.Ok) {
+        const ok = response.Ok;
+        console.log(
+          JSON.stringify(response) +
+            " ! " +
+            parseFloat(ok.value) +
+            " ! " +
+            ok.timestamp
+        );
+        setValue((prevValue) => [
+          ...prevValue,
+          {
+            timestamp: ok.timestamp,
+            output: parseFloat(ok.value),
+          },
+        ]);
+      }
+    }, 1000);
 
     return () => {
       clearInterval(interval);

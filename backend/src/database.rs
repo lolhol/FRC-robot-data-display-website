@@ -18,11 +18,15 @@ impl SQLiteDatabase {
             [],
         );
 
-        Ok(SQLiteDatabase {
+        let self_inst = SQLiteDatabase {
             connection,
             last_update: 0,
             min_time_between_cleans: min_time_between_cleans,
-        })
+        };
+
+        let _ = self_inst.clean_database();
+
+        Ok(self_inst)
     }
 
     pub fn get_values(

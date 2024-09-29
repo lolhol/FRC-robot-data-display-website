@@ -24,6 +24,7 @@
     "react-dom": "^18",
     "socket.io": "^4.7.5",
     "socket.io-client": "^4.7.5",
+    "types_plugin_frc_nw_table": "^1.0.7",
     "ws": "^8.18.0"
   },
   "devDependencies": {
