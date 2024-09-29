@@ -99,6 +99,8 @@ pub fn begin_network_table(
 /// - `database`: The database that will be used to store the data
 ///
 pub fn write_all(message: MessageData, database: Arc<Mutex<SQLiteDatabase>>) -> () {
+    let mut message = message;
+    message.timestamp /= 1000;
     let _res = database
         .lock()
         .unwrap()

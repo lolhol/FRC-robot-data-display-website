@@ -17,11 +17,7 @@ impl TableEntree {
     }
 
     pub fn from_message(data: MessageData) -> Self {
-        Self::new(
-            data.topic_name,
-            data.data.to_string(),
-            (data.timestamp / 1000000) as u32,
-        )
+        Self::new(data.topic_name, data.data.to_string(), data.timestamp)
     }
 
     pub fn get_error() -> Self {
