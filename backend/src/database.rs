@@ -24,7 +24,7 @@ impl SQLiteDatabase {
             min_time_between_cleans: min_time_between_cleans,
         };
 
-        let _ = self_inst.clean_database();
+        let _ = self_inst.clear_database();
 
         Ok(self_inst)
     }
@@ -115,6 +115,10 @@ impl SQLiteDatabase {
     }
 
     fn clean_database_time(&self, min_time_since_last_update: u32) -> Result<(), rusqlite::Error> {
+        if self.last_update < min_time_since_last_update {
+            return Ok(());
+        }
+
         self.connection.execute(
             "DELETE FROM data WHERE timestamp <= ?",
             [(self.last_update - min_time_since_last_update).to_string()],
