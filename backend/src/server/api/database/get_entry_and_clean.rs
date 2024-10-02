@@ -14,27 +14,33 @@ use super::codes;
 /// Gets an entry from the database based on the provided topic. This is one of the api endpoints that you can call from the frontend. This also cleans the database after the getting of the entry.
 ///
 /// # Parameters
-/// - `table_topic`: A `Json<Topic>` that contains the topic to get from the database
+/// - `topic`: A `String` that contains the topic to get from the database
+/// - `time_since_last_update`: A `u32` that contains the time since the last update. OPTIONAL
 /// - `database`: The database that will be used to get the data
 ///     - note that the database param is passed into the function by default
 ///
-#[post("/get-entry-and-clean", data = "<table_topic>")]
+#[get("/get-entry-and-clean?<topic>&<time_since_last_update>")]
 pub fn get_entry_and_clean(
-    table_topic: Json<Topic>,
+    topic: String,
+    time_since_last_update: Option<u32>,
     database: &State<Arc<Mutex<SQLiteDatabase>>>,
 ) -> Json<Result<Option<TableEntree>, codes::Error>> {
     let database = database.lock();
 
     if database.is_err() {
         return Json(Err(codes::Error::new(
-            &&codes::Error::DatabasePoisonedError(-1),
+            &codes::Error::DatabasePoisonedError(-1),
         )));
     }
 
     let database = database.unwrap();
-    let topic_value = database.get_value(&table_topic.topic);
+    let topic_value = database.get_value(&topic);
 
-    let _ = database.clean_database();
+    if time_since_last_update.is_some() {
+        let _ = database.clean_database_time(time_since_last_update.unwrap());
+    } else {
+        let _ = database.clean_database();
+    }
 
     Json(Ok(if let Ok(topic_value) = topic_value {
         Some(topic_value)
@@ -69,9 +75,8 @@ mod tests {
         test_util::make_db_poisoned(database);
 
         let response = client
-            .post("/get-entry-and-clean")
+            .get("/get-entry-and-clean?topic=non_existent_topic")
             .header(ContentType::JSON)
-            .body(r#"{"topic":"non_existent_topic"}"#)
             .dispatch();
 
         let body = response.into_string().unwrap();
@@ -94,9 +99,8 @@ mod tests {
         let client = Client::tracked(rocket).expect("valid rocket instance");
 
         let response = client
-            .post("/get-entry-and-clean")
+            .get("/get-entry-and-clean?topic=test")
             .header(ContentType::JSON)
-            .body(r#"{"topic": "test"}"#)
             .dispatch();
 
         let body = response.into_string().unwrap();
@@ -122,9 +126,8 @@ mod tests {
         let client = Client::tracked(rocket).expect("valid rocket instance");
 
         let response = client
-            .post("/get-entry-and-clean")
+            .get("/get-entry-and-clean?topic=test")
             .header(ContentType::JSON)
-            .body(r#"{"topic": "test"}"#)
             .dispatch();
 
         let body = response.into_string().unwrap();

@@ -114,7 +114,10 @@ impl SQLiteDatabase {
         Ok(())
     }
 
-    fn clean_database_time(&self, min_time_since_last_update: u32) -> Result<(), rusqlite::Error> {
+    pub fn clean_database_time(
+        &self,
+        min_time_since_last_update: u32,
+    ) -> Result<(), rusqlite::Error> {
         if self.last_update < min_time_since_last_update {
             return Ok(());
         }

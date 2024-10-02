@@ -14,13 +14,13 @@ use super::codes;
 /// Gets an entry from the database based on the provided topic. This is one of the api endpoints that you can call from the frontend.
 ///
 /// # Parameters
-/// - `table_topic`: A `Json<Topic>` that contains the topic to get from the database
+/// - `topic`: A `String` that contains the topic to get from the database
 /// - `database`: The database that will be used to get the data
 ///     - note that the database param is passed into the function by default
 ///
-#[post("/get-entry", data = "<table_topic>")]
+#[get("/get-entry?<topic>")]
 pub fn get_entry(
-    table_topic: Json<Topic>,
+    topic: String,
     database: &State<Arc<Mutex<SQLiteDatabase>>>,
 ) -> Json<Result<Option<TableEntree>, codes::Error>> {
     let database = database.lock();
@@ -32,13 +32,11 @@ pub fn get_entry(
     }
 
     let database = database.unwrap();
-    Json(Ok(
-        if let Ok(topic_value) = database.get_value(&table_topic.topic) {
-            Some(topic_value)
-        } else {
-            None
-        },
-    ))
+    Json(Ok(if let Ok(topic_value) = database.get_value(&topic) {
+        Some(topic_value)
+    } else {
+        None
+    }))
 }
 #[cfg(test)]
 /// # Function
@@ -68,9 +66,8 @@ mod tests {
         test_util::make_db_poisoned(database);
 
         let response = client
-            .post("/get-entry")
+            .get("/get-entry?topic=abc/non_existent_topic")
             .header(ContentType::JSON)
-            .body(r#"{"topic":"non_existent_topic"}"#)
             .dispatch();
 
         let body = response.into_string().unwrap();
@@ -93,9 +90,8 @@ mod tests {
         let client = Client::tracked(rocket).expect("valid rocket instance");
 
         let response = client
-            .post("/get-entry")
+            .get("/get-entry?topic=test")
             .header(ContentType::JSON)
-            .body(r#"{"topic": "test"}"#)
             .dispatch();
 
         let body = response.into_string().unwrap();
