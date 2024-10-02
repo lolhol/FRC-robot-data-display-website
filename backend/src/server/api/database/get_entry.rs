@@ -66,7 +66,14 @@ mod tests {
         test_util::make_db_poisoned(database);
 
         let response = client
-            .get("/get-entry?topic=abc/non_existent_topic")
+            .get(test_util::to_get_request(
+                Topic {
+                    topic: "abc/non_existent_topic".to_string(),
+                    amount: None,
+                    time_since_last_update: None,
+                },
+                "/get-entry",
+            ))
             .header(ContentType::JSON)
             .dispatch();
 
@@ -90,7 +97,14 @@ mod tests {
         let client = Client::tracked(rocket).expect("valid rocket instance");
 
         let response = client
-            .get("/get-entry?topic=test")
+            .get(test_util::to_get_request(
+                Topic {
+                    topic: "test".to_string(),
+                    amount: None,
+                    time_since_last_update: None,
+                },
+                "/get-entry",
+            ))
             .header(ContentType::JSON)
             .dispatch();
 

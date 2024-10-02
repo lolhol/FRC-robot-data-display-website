@@ -11,8 +11,8 @@ use rocket::{Build, Rocket};
 use crate::database::{structs::table_entree::TableEntree, SQLiteDatabase};
 
 use super::{
-    clean_whole_db::clean_whole_database, clear_database::clear_database, get_entries::get_entries,
-    get_entry::get_entry, get_entry_and_clean::get_entry_and_clean,
+    clean_whole_db::clean_whole_database, clear_database::clear_database, data_struct::Topic,
+    get_entries::get_entries, get_entry::get_entry, get_entry_and_clean::get_entry_and_clean,
 };
 
 ///
@@ -30,6 +30,27 @@ pub fn get_database(min_time_between_cleans: u32) -> SQLiteDatabase {
     let db: SQLiteDatabase = SQLiteDatabase::new("test.db", min_time_between_cleans).unwrap();
     let _ = db.clear_database();
     db
+}
+
+///
+/// # Function
+/// Utility to make getting the strings for the GET requests easier
+pub fn to_get_request(topic: Topic, initial_string: &str) -> String {
+    format!(
+        "{}?topic={}&amount={}&time_since_last_update={}",
+        initial_string,
+        topic.topic,
+        if let Some(amount) = topic.amount {
+            amount.to_string()
+        } else {
+            "null".to_string()
+        },
+        if let Some(time) = topic.time_since_last_update {
+            time.to_string()
+        } else {
+            "null".to_string()
+        }
+    )
 }
 
 ///
