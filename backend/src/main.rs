@@ -108,7 +108,7 @@ async fn main() {
 }
 
 fn get_invalid_env_list() -> Vec<String> {
-    let envs: HashMap<&str, &str> = hashma![
+    let envs: Vec<&str> = vec![
         "DATABASE_PATH",
         "DATABASE_MIN_TIME_AFTER_UPDATE",
         "SERVER_PORT",
