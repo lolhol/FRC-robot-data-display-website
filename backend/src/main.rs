@@ -1,4 +1,5 @@
 use std::{
+    collections::HashMap,
     env,
     os::unix::process,
     sync::{Arc, Mutex},
@@ -36,6 +37,20 @@ use dotenv::dotenv;
 async fn main() {
     let local_set = tokio::task::LocalSet::new(); // Local set is a thing that allows you to .await multiple things at the same time in a single thread
     dotenv().ok(); // load the .env file
+
+    let invalid_envs = get_invalid_env_list();
+    if !invalid_envs.is_empty() {
+        println!(
+            "{}",
+            format!(
+                "The following environment variables are not set: {}. Please set them and try again.",
+                invalid_envs.join(", ")
+            )
+            .red()
+        );
+
+        return ();
+    }
 
     let database = database::SQLiteDatabase::new(
         &env::var("DATABASE_PATH").unwrap(),
@@ -89,5 +104,38 @@ async fn main() {
 
     println!("Shut down complete.");
 
-    ()
+    return ();
+}
+
+fn get_invalid_env_list() -> Vec<String> {
+    let envs: HashMap<&str, &str> = hashma![
+        "DATABASE_PATH",
+        "DATABASE_MIN_TIME_AFTER_UPDATE",
+        "SERVER_PORT",
+        "NETWORK_TABLE_IP",
+        "NETWORK_TABLE_PORT",
+        "TIME_BETWEEN_RECONNECT_ATTEMPTS",
+    ];
+
+    let mut invalid_envs = Vec::new();
+    for env in envs {
+        if env::var(env).is_err()
+            || (is_supposed_to_be_number(env) && env::var(env).unwrap().parse::<u16>().is_err())
+        {
+            invalid_envs.push(env.to_string());
+        }
+    }
+
+    return invalid_envs;
+}
+
+fn is_supposed_to_be_number(s: &str) -> bool {
+    let number_envs = vec![
+        "DATABASE_MIN_TIME_AFTER_UPDATE",
+        "NETWORK_TABLE_PORT",
+        "TIME_BETWEEN_RECONNECT_ATTEMPTS",
+        "SERVER_PORT",
+    ];
+
+    return number_envs.contains(&s);
 }
