@@ -37,3 +37,8 @@ next-env.d.ts
 
 target
 Cargo.lock
+test.db
+.VSCodeCounter
+*.db
+db
+database.db
